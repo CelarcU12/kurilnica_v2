@@ -8,6 +8,7 @@ import sys
 import random
 import datetime
 from Kurilnica import Kurilnica
+from db import saveMeasureToDB
 
 #from relay import getStatus, on, off
 
@@ -67,6 +68,8 @@ def postData1():
 
     t_cur = (temp1.value,temp2.value,temp3.value,temp4.value, vlaga.value, vlaga.time)
     t1.append(t_cur)
+
+    db.saveMeasureToDB([temp1,temp2,temp3,temp4,vlaga,reley1,reley2])
     return jsonify({
         'las_val': datetime.datetime.now(),
         't1': t_cur,

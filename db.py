@@ -3,8 +3,8 @@ import datetime
 
 import logging
 
-logging.basicConfig(filename='log/db.log', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
-                    level=logging.DEBUG)
+#logging.basicConfig(filename='log/db.log', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
+  #                  level=logging.DEBUG)
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -162,7 +162,7 @@ def relaySpremembe(limit):
                     "time:": str(el[7])})
     return sez
 
-def saveMeasureToDB(dict={}):
+def saveMeasureToDB(sez=[]):
     '''
     Shranjevanje meritve v bazo
 
@@ -170,12 +170,15 @@ def saveMeasureToDB(dict={}):
     :return: 1 -> OK, 0-> ERROR
     '''
     mycursor = mydb.cursor()
-    #for meritev in dict:
-    #    device =
-    sql = "insert into   doma.meritev (device_id,value, value_type,status, user ) values (%s,%s,%s, 1, 1)"
-    val = ('t1', 20, 1)
-    #mycursor.callproc('addMeritev', ['t1',20])
-    #mycursor.stored_results()
-    mydb.commit()
+    for meritev in sez:
+
+        sql = "insert into   doma.meritev (device_id,value, value_type,status, user ) values (%s,%s,%s, 1, 1)"
+        val = (meritev.id, meritev.value, meritev.type)
+        # mycursor.callproc('addMeritev', ['t1',20])
+        mycursor.execute(sql, val)
+        mydb.commit()
+    #sql = "INSERT INTO temperatura (name,value,device_id) VALUES (%s,%s,%s)"
+    #val = (name, val, dev_id)
+
     #logging.info("INSERT:  " + str(name) + " ; " + str(val) + " ; ")
     return 1
