@@ -3,8 +3,8 @@ import datetime
 
 import logging
 
-logging.basicConfig(filename='log/db.log', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
-                    level=logging.DEBUG)
+#logging.basicConfig(filename='log/db.log', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
+  #                  level=logging.DEBUG)
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -162,7 +162,7 @@ def relaySpremembe(limit):
                     "time:": str(el[7])})
     return sez
 
-def saveMeasureToDB(dict):
+def saveMeasureToDB(dict={}):
     '''
     Shranjevanje meritve v bazo
 
@@ -174,8 +174,11 @@ def saveMeasureToDB(dict):
     #    device =
     #sql = "INSERT INTO temperatura (name,value,device_id) VALUES (%s,%s,%s)"
     #val = (name, val, dev_id)
-    mycursor.callproc('addMeritev', ['t1',20])
-    mycursor.stored_results()
-    #mydb.commit()
+    sql = "insert into   doma.meritev (device_id,value, value_type,status, user ) values (%s,%s,%s, 1, 1)"
+    val = (1, 20, 'celzija')
+    #mycursor.callproc('addMeritev', ['t1',20])
+    mycursor.execute(sql,val)
+    mydb.commit()
     #logging.info("INSERT:  " + str(name) + " ; " + str(val) + " ; ")
     return 1
+saveMeasureToDB()
