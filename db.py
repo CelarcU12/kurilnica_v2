@@ -162,7 +162,7 @@ def relaySpremembe(limit):
                     "time:": str(el[7])})
     return sez
 
-def saveMeasureToDB(dict):
+def saveMeasureToDB(dict={}):
     '''
     Shranjevanje meritve v bazo
 
@@ -172,10 +172,10 @@ def saveMeasureToDB(dict):
     mycursor = mydb.cursor()
     #for meritev in dict:
     #    device =
-    #sql = "INSERT INTO temperatura (name,value,device_id) VALUES (%s,%s,%s)"
-    #val = (name, val, dev_id)
-    mycursor.callproc('addMeritev', ['t1',20])
-    mycursor.stored_results()
-    #mydb.commit()
+    sql = "insert into   doma.meritev (device_id,value, value_type,status, user ) values (%s,%s,%s, 1, 1)"
+    val = ('t1', 20, 1)
+    #mycursor.callproc('addMeritev', ['t1',20])
+    #mycursor.stored_results()
+    mydb.commit()
     #logging.info("INSERT:  " + str(name) + " ; " + str(val) + " ; ")
     return 1
