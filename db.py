@@ -1,4 +1,5 @@
 import mysql.connector
+
 import datetime
 
 import logging
@@ -7,7 +8,7 @@ import logging
   #                  level=logging.DEBUG)
 
 mydb = mysql.connector.connect(
-    host="localhost",
+    host="192.168.64.117",
     user="pi",
     passwd="password",
     database="doma"
