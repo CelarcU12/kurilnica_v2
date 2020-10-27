@@ -8,7 +8,7 @@ import sys
 import random
 import datetime
 from Kurilnica import Kurilnica
-from db import saveMeasureToDB
+import db
 
 #from relay import getStatus, on, off
 
@@ -27,10 +27,11 @@ vlaga = Kurilnica("Vlaga", 5)
 def hello():
     '''dokumentcija '''
     logging.info(" domov ")
+    
     return "<h1>Hello</h1>" \
-           "<p> * T1: bojler,</p>"\
-            "<p> * T2: zalogovnik,</p>"\
-            "<p> * T3: peč </p>"
+           "<p> * T1: bojler:    "  +str(temp1.value)+temp1.strVal+"</p>"\
+            "<p> * T2: zalogovnik:   "+str(temp2.value)+temp2.strVal+"</p>"\
+            "<p> * T3: peč :     "+str(temp3.value)+temp3.strVal+" </p>"
 
 
 @app.route('/getAll', methods=['GET'])
