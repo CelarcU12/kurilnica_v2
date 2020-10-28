@@ -10,7 +10,7 @@ import datetime
 from Kurilnica import Kurilnica
 
 
-#import db
+import db
 
 #from relay import getStatus, on, off
 
@@ -122,7 +122,7 @@ def getData1():
 def preveriTemp1(temp1, temp2):
     if temp1.value > temp2.value:
         return "OFF"
-    else
+    else:
         return "ON"
 
 
