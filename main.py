@@ -26,8 +26,11 @@ temp2 = Kurilnica("Temp2", 2)
 temp3 = Kurilnica("Temp3", 3)
 temp4 = Kurilnica("Temp4", 4)
 vlaga = Kurilnica("Vlaga", 5)
+reley1 = Kurilnica("Relay1", 7, 0)
+reley2 = Kurilnica("Relay2", 8, 0)
 
-html = '''<!DOCTYPE html>
+def getHtml(t1=temp1, t2=temp2, t3=temp3, t4=temp4, v=vlaga, r1=reley1, r2=reley2):
+    html = '''<!DOCTYPE html>
 <html>
 <head>
 <style>
@@ -43,15 +46,19 @@ th, td {
 <body>
 
 <h2>Kurilnica</h2>
-<p>Zadnja meritev: '''+ str(temp4.time) +'''</p>
+<p>Zadnja meritev: '''+ str(t4.time) +'''</p>
 
 
 <br>
-<h2>Temperatura : '''+ str(temp4.value) +'''</h2>
+<h2>Temperatura : '''+ str(t4.value) +'''</h2>
 <br>
 
 <br>
-<h2>Vlaga : '''+ str(vlaga.value) +'''</h2>
+<h2>Vlaga : '''+ str(v.value) +'''</h2>
+<br>
+<br>
+<h2>Pumpa med pečjo in zalogovnikom : '''+ str(r1.strVal) +'''</h2>
+<h2>Pumpa za stanovanje : '''+ str(r2.strVal) +'''</h2>
 <br>
 <br>
 <table style="width:100%">
@@ -63,17 +70,17 @@ th, td {
   <tr>
     <td>T1</td>
     <td>BOJLER</td>
-    <td>''' + str(temp1.value) + '''</td>
+    <td>''' + str(t1.value) + '''</td>
   </tr>
   <tr>
     <td>T2</td>
     <td>Zalogovnik</td>
-    <td>'''+ str(temp2.value) +'''</td>
+    <td>'''+ str(t2.value) +'''</td>
   </tr>
   <tr>
     <td>T3</td>
     <td>Peč</td>
-    <td>'''+ str(temp3.value) +'''</td>
+    <td>'''+ str(t3.value) +'''</td>
   </tr>
 </table>
 <a href="https://www.w3schools.com">This is a link</a>
@@ -81,12 +88,12 @@ th, td {
 </body>
 </html>
 '''
-
+    return html
 @app.route('/')
 def hello():
     '''dokumentcija '''
     logging.info(" domov ")
-    return html
+    return getHtml(temp1,temp2,temp3,temp4,vlaga ,reley1,reley2)
     #return "<h1>Hello</h1>" \
      #      "<p> * T1: bojler:    "  +str(temp1.value)+temp1.strVal+"</p>"\
     ##      "<p> * T2: zalogovnik:   "+str(temp2.value)+temp2.strVal+"</p>"\
@@ -136,7 +143,7 @@ def postData1():
         'all':t1
     }), 201
 
-reley1 = Kurilnica("Relay1", 7, 0)
+
 @app.route('/r1', methods=['GET'])
 def relay1Get():
     return jsonify({'r1':reley1.value, 'value':reley1.strVal})
@@ -153,7 +160,7 @@ def relay1Post():
     return jsonify({'r1':reley1.value,
                     'value':reley1.strVal
                     }), 201
-reley2 = Kurilnica("Relay2", 8, 0)
+
 @app.route('/r2', methods=['GET'])
 def relay2Get():
     return jsonify({'r2':reley2.value})
