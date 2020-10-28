@@ -17,21 +17,85 @@ import logging
 
 app = Flask(__name__)
 
+
 t1=[]
 temp1 = Kurilnica("Temp1", 1)
 temp2 = Kurilnica("Temp2", 2)
 temp3 = Kurilnica("Temp3", 3)
 temp4 = Kurilnica("Temp4", 4)
 vlaga = Kurilnica("Vlaga", 5)
+reley1 = Kurilnica("Relay1", 7, 0)
+reley2 = Kurilnica("Relay2", 8, 0)
+
+def getHtml(t1=temp1, t2=temp2, t3=temp3, t4=temp4, v=vlaga, r1=reley1, r2=reley2):
+    html = '''<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+}
+</style>
+</head>
+<body>
+
+<h2>Kurilnica</h2>
+<p>Zadnja meritev: '''+ str(t4.time) +'''</p>
+
+
+<br>
+<h2>Temperatura : '''+ str(t4.value) +'''</h2>
+<br>
+
+<br>
+<h2>Vlaga : '''+ str(v.value) +'''</h2>
+<br>
+<br>
+<h2>Pumpa med pečjo in zalogovnikom : '''+ str(r1.strVal) +'''</h2>
+<h2>Pumpa za stanovanje : '''+ str(r2.strVal) +'''</h2>
+<br>
+<br>
+<table style="width:100%">
+  <tr>
+    <th></th>
+    <th>Naprava</th> 
+    <th>Stopinj</th>
+  </tr>
+  <tr>
+    <td>T1</td>
+    <td>BOJLER</td>
+    <td>''' + str(t1.value) + '''</td>
+  </tr>
+  <tr>
+    <td>T2</td>
+    <td>Zalogovnik</td>
+    <td>'''+ str(t2.value) +'''</td>
+  </tr>
+  <tr>
+    <td>T3</td>
+    <td>Peč</td>
+    <td>'''+ str(t3.value) +'''</td>
+  </tr>
+</table>
+<a href="https://www.w3schools.com">This is a link</a>
+
+</body>
+</html>
+'''
+    return html
 @app.route('/')
 def hello():
     '''dokumentcija '''
     logging.info(" domov ")
-    
-    return "<h1>Hello</h1>" \
-           "<p> * T1: bojler:    "  +str(temp1.value)+temp1.strVal+"</p>"\
-            "<p> * T2: zalogovnik:   "+str(temp2.value)+temp2.strVal+"</p>"\
-            "<p> * T3: peč :     "+str(temp3.value)+temp3.strVal+" </p>"
+    return getHtml(temp1,temp2,temp3,temp4,vlaga ,reley1,reley2)
+    #return "<h1>Hello</h1>" \
+     #      "<p> * T1: bojler:    "  +str(temp1.value)+temp1.strVal+"</p>"\
+    ##      "<p> * T2: zalogovnik:   "+str(temp2.value)+temp2.strVal+"</p>"\
+    #        "<p> * T3: peč :     "+str(temp3.value)+temp3.strVal+" </p>"
 
 
 @app.route('/getAll', methods=['GET'])
@@ -77,7 +141,7 @@ def postData1():
         'all':t1
     }), 201
 
-reley1 = Kurilnica("Relay1", 7, 0)
+
 @app.route('/r1', methods=['GET'])
 def relay1Get():
     return jsonify({'r1':reley1.value, 'value':reley1.strVal})
@@ -94,7 +158,7 @@ def relay1Post():
     return jsonify({'r1':reley1.value,
                     'value':reley1.strVal
                     }), 201
-reley2 = Kurilnica("Relay2", 8, 0)
+
 @app.route('/r2', methods=['GET'])
 def relay2Get():
     return jsonify({'r2':reley2.value})
