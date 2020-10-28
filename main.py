@@ -115,6 +115,15 @@ def getData1():
                     'zadnja_meritev': temp1.time,
                     'vrednost':temp1.value
                     })
+
+
+def preveriTemp1(temp1, temp2):
+    if temp1.value > temp2.value:
+        return "OFF"
+    else
+        return "ON"
+
+
 @app.route('/t1', methods=['POST'])
 def postData1():
     print("post T1")
@@ -130,6 +139,8 @@ def postData1():
     temp4.time = datetime.datetime.now()
     vlaga.value = request.json['h4']
     vlaga.time = datetime.datetime.now()
+
+    reley1.strVal = preveriTemp1(temp1, temp3)
 
     t_cur = (temp1.value,temp2.value,temp3.value,temp4.value, vlaga.value, vlaga.time)
     t1.append(t_cur)
