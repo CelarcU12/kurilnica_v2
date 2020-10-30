@@ -149,7 +149,7 @@ def postData1():
     return jsonify({
         'las_val': datetime.datetime.now(),
         't1': t_cur,
-        'all':t1
+        'all':t1[-1]
     }), 201
 
 
