@@ -183,3 +183,15 @@ def saveMeasureToDB(sez=[]):
 
     #logging.info("INSERT:  " + str(name) + " ; " + str(val) + " ; ")
     return 1
+
+def getDeviceMesaure(device_id, limit = 100):
+    mycursor = mydb.cursor()
+    sql = "SELECT value, measure_time FROM doma.meritev where device_id = %s order by measure_time desc LIMIT %s;"
+    val = (int(device_id), limit)
+    mycursor.execute(sql, val)
+    myresult = mycursor.fetchall()
+    sez = []
+    for el in myresult:
+        sez.append({"vrednost": str(el[0]),
+                    "cas": str(el[1])})
+    return sez

@@ -56,7 +56,11 @@ th, td {
 <br>
 <br>
 <h2>Pumpa med pečjo in zalogovnikom : '''+ str(r1.strVal) +'''</h2>
+<a href='/r1=OFF'> OFF </a>
+<a href='http://192.168.64.111:5000/r1=ON'> ON</a>
 <h2>Pumpa za stanovanje : '''+ str(r2.strVal) +'''</h2>
+<a href='http://192.168.64.111:5000/r2=OFF'> OFF </a>
+<a href='http://192.168.64.111:5000/r2=ON'> ON</a>
 <br>
 <br>
 <table style="width:100%">
@@ -186,11 +190,39 @@ def relay2Post():
     return jsonify({'r2':reley2.value,
                     'value': reley2.strVal
                     }), 201
+@app.route('/r1=<status>', methods=['POST'])
+def relay1OnOffPost(status):
+    '''
+    status releja 2, 0 => OFF, 1=> ON
+    '''
+    print("post r1 "+status)
+    reley1.strVal = status
+    return jsonify({'r1':reley1.value,
+                    'value': reley1.strVal
+                    }), 201
+@app.route('/r2=<status>', methods=['POST'])
+def relay2OnOffPost(status):
+    '''
+    status releja 2, 0 => OFF, 1=> ON
+    '''
+    print("post r2 "+status)
+    reley2.strVal = status
+    return jsonify({'r2':reley2.value,
+                    'value': reley2.strVal
+                    }), 201
+
 
 @app.route('/relayStatus', methods=['GET'])
 def relayStatus():
     return jsonify({'r1':reley1.strVal,
                     'r2':reley2.strVal})
 
+@app.route('/devices=<device_id>', methods=['GET'])
+def getDataOfDevice(device_id):
+    content = request.json
+    sez = db.getDeviceMesaure(device_id)
+    return Response(json.dumps(sez), mimetype='application/json')
+
+
 if __name__=='__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', threaded=True)
