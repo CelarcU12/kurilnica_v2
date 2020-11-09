@@ -184,10 +184,10 @@ def saveMeasureToDB(sez=[]):
     #logging.info("INSERT:  " + str(name) + " ; " + str(val) + " ; ")
     return 1
 
-def getDeviceMesaure(device_id, limit = 100):
+def getDeviceMesaure(device_id, st_dni=1, natancnost=10):
     mycursor = mydb.cursor()
-    sql = "SELECT value, measure_time FROM doma.meritev where device_id = %s order by measure_time desc LIMIT %s;"
-    val = (int(device_id), limit)
+    sql = "SELECT value, measure_time FROM doma.meritev where device_id = %s and measure_time >= now() - INTERVAL %s DAY and id mod %s = 0 order by measure_time desc;"
+    val = (int(device_id), st_dni, natancnost * st_dni)
     mycursor.execute(sql, val)
     myresult = mycursor.fetchall()
     sez = []

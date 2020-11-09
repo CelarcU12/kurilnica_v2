@@ -2,7 +2,7 @@ import markdown
 import json
 
 import os
-from flask import Flask, escape, request,jsonify,Response
+from flask import Flask, escape, request,jsonify,Response, redirect
 import sys
 
 import random
@@ -57,10 +57,10 @@ th, td {
 <br>
 <h2>Pumpa med pečjo in zalogovnikom : '''+ str(r1.strVal) +'''</h2>
 <a href='/r1=OFF'> OFF </a>
-<a href='http://192.168.64.111:5000/r1=ON'> ON</a>
+<a href='http://192.168.64.117:5000/r1=ON'> ON</a>
 <h2>Pumpa za stanovanje : '''+ str(r2.strVal) +'''</h2>
-<a href='http://192.168.64.111:5000/r2=OFF'> OFF </a>
-<a href='http://192.168.64.111:5000/r2=ON'> ON</a>
+<a href='http://192.168.64.117:5000/r2=OFF'> OFF </a>
+<a href='http://192.168.64.117:5000/r2=ON'> ON</a>
 <br>
 <br>
 <table style="width:100%">
@@ -144,7 +144,7 @@ def postData1():
     vlaga.value = request.json['h4']
     vlaga.time = datetime.datetime.now()
 
-    reley1.strVal = preveriTemp1(temp1, temp3)
+    #reley1.strVal = preveriTemp1(temp1, temp3)
 
     t_cur = (temp1.value,temp2.value,temp3.value,temp4.value, vlaga.value, vlaga.time)
     t1.append(t_cur)
@@ -190,27 +190,25 @@ def relay2Post():
     return jsonify({'r2':reley2.value,
                     'value': reley2.strVal
                     }), 201
-@app.route('/r1=<status>', methods=['POST'])
+@app.route('/r1=<status>', methods=['GET'])
 def relay1OnOffPost(status):
     '''
     status releja 2, 0 => OFF, 1=> ON
     '''
     print("post r1 "+status)
     reley1.strVal = status
-    return jsonify({'r1':reley1.value,
-                    'value': reley1.strVal
-                    }), 201
-@app.route('/r2=<status>', methods=['POST'])
+    return redirect('/')
+   # return jsonify({'r1':reley1.value,
+    #                'value': reley1.strVal
+     #               }), 201
+@app.route('/r2=<status>', methods=['GET'])
 def relay2OnOffPost(status):
     '''
     status releja 2, 0 => OFF, 1=> ON
     '''
     print("post r2 "+status)
     reley2.strVal = status
-    return jsonify({'r2':reley2.value,
-                    'value': reley2.strVal
-                    }), 201
-
+    return redirect('/')
 
 @app.route('/relayStatus', methods=['GET'])
 def relayStatus():
