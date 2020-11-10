@@ -1,4 +1,4 @@
-import markdown
+#import markdown
 import json
 
 import os
@@ -9,6 +9,7 @@ import random
 import datetime
 from Kurilnica import Kurilnica
 import db
+
 
 #from relay import getStatus, on, off
 
@@ -220,6 +221,33 @@ def getDataOfDevice(device_id):
     content = request.json
     sez = db.getDeviceMesaure(device_id)
     return Response(json.dumps(sez), mimetype='application/json')
+
+@app.route('/devices', methods=['GET'])
+def getDataOfAllDevices():
+    content = request.json
+    sez = db.getDeviceMesaureAll()
+    if len(sez) == 0:
+        return jsonify({'prazen seznam'
+                    }), 200
+    cas= sez[0][2]
+    res ={}
+    one={}
+    j=0
+    for i in range(0,len(sez)):
+        if cas != sez[i][2]:
+            cas = sez[i][2]
+            one['cas']= sez[i][2]
+            one[sez[i][0]]= sez[i][1]
+            res[j] = one
+            one={}
+            j+=1
+        else:
+            one[sez[i][0]]= sez[i][1]
+
+
+
+    return Response(json.dumps(res),  mimetype='application/json')
+#    return Response(json.dumps(sez), mimetype='application/json')
 
 
 if __name__=='__main__':
