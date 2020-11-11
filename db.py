@@ -195,3 +195,32 @@ def getDeviceMesaure(device_id, st_dni=1, natancnost=10):
         sez.append({"vrednost": str(el[0]),
                     "cas": str(el[1])})
     return sez
+
+def getDeviceMesaureAll(st_dni=1, natancnost=100):
+    mycursor = mydb.cursor()
+    sql = "select device_id, value, measure_time from meritev where measure_time in (select     m.measure_time    FROM doma.meritev m where measure_time >= now() - INTERVAL %s DAY and id mod %s = 0 order by measure_time desc);"
+    val = (st_dni, natancnost * st_dni)
+    mycursor.execute(sql, val)
+    myresult = mycursor.fetchall()
+    sez = []
+    cas= myresult[0][2]
+    meritveByTime=[]
+    i=0
+    for el in myresult:
+        # print(str(cas) +"=="+ str(el[2]))
+        # if cas == el[2]:
+        #     i+=1
+        #     print("je enak")
+        #     meritveByTime.append((el[0],el[1]))
+        # else:
+        #     i+=1
+        #     print("Ni enak")
+        #     cas == el[2]
+        #     meritveByTime.append(("cas",cas))
+        #     meritveByTime.append((el[0],el[1]))
+        #     sez.append(meritveByTime)
+        #     meritveByTime = []
+        # if i > 30:
+        #     break
+        sez.append((el[0], str(el[1]),str(el[2])))
+    return sez
