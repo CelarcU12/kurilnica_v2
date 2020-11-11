@@ -221,6 +221,23 @@ def getDataOfDevice(device_id):
     sez = db.getDeviceMesaure(device_id)
     return Response(json.dumps(sez), mimetype='application/json')
 
+@app.route('/device1', methods=['GET'])
+def getDataOfDevice1():
+    print("device 1")
+    print(request.url)
+    sez = db.getDeviceMesaure(1)
+    return Response(json.dumps(sez), mimetype='application/json')
+
+@app.route('/device2', methods=['GET'])
+def getDataOfDevice2():
+    content = request.json
+    sez = db.getDeviceMesaure(2)
+    return Response(json.dumps(sez), mimetype='application/json')
+@app.route('/device3', methods=['GET'])
+def getDataOfDevice3():
+    content = request.json
+    sez = db.getDeviceMesaure(3)
+    return Response(json.dumps(sez), mimetype='application/json')
 
 if __name__=='__main__':
     app.run(host='0.0.0.0', threaded=True)
