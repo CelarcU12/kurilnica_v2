@@ -145,7 +145,7 @@ def postData1():
     vlaga.value = request.json['h4']
     vlaga.time = datetime.datetime.now()
 
-    #reley1.strVal = preveriTemp1(temp1, temp3)
+    reley1.strVal = preveriTemp1(temp1, temp3)
 
     t_cur = (temp1.value,temp2.value,temp3.value,temp4.value, vlaga.value, vlaga.time)
     t1.append(t_cur)
