@@ -4,6 +4,8 @@ import datetime
 
 import logging
 
+from Kurilnica import Kurilnica
+
 #logging.basicConfig(filename='log/db.log', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
   #                  level=logging.DEBUG)
 
@@ -224,3 +226,15 @@ def getDeviceMesaureAll(st_dni=1, natancnost=100):
         #     break
         sez.append((el[0], str(el[1]),str(el[2])))
     return sez
+
+
+def getLastData():
+    sql = 'SELECT m.device_id, d.full_name, d.comment, m.value, d.type, m.measure_time FROM doma.meritev m, doma.device d where m.device_id = d.device_id and measure_time > now() - interval 1 hour order by m.measure_time desc , m.device_id limit 7;'
+    mycursor = mydb.cursor()
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    sez = []
+    for el in myresult:
+        sez.append(Kurilnica(el[1],el[0],el[3],str(el[3])+el[4],el[5],el[4], el[2]))
+    return sez
+

@@ -262,11 +262,26 @@ def getDataOfAllDevices():
             j+=1
         else:
             one[sez[i][0]]= sez[i][1]
-
-
-
     return Response(json.dumps(res),  mimetype='application/json')
 #    return Response(json.dumps(sez), mimetype='application/json')
 
+@app.route('/i', methods=['GET'])
+def getInfoOfDevices():
+    ''' dobi zadnje informacije o vseh napravah '''
+    sez = db.getLastData()
+    res=[]
+    for el in sez:
+        res.append({
+                'id': el.id,
+                'ime': el.name,
+                'vrednost': str(el.value),
+                'tip': el.type,
+                'zadnjaMeritev': str(el.time),
+                'vrednostStr': el.strVal,
+                'opis': el.comment
+        })
+           
+    #return res
+    return Response(json.dumps(res),  mimetype='application/json')
 if __name__=='__main__':
     app.run(host='0.0.0.0', threaded=True)
