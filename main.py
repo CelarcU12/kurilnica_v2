@@ -230,7 +230,7 @@ def getDataOfAllDevices():
         return jsonify({'prazen seznam'
                     }), 200
     cas= sez[0][2]
-    res ={}
+    res =[]
     one={}
     j=0
     for i in range(0,len(sez)):
@@ -238,7 +238,7 @@ def getDataOfAllDevices():
             cas = sez[i][2]
             one['cas']= sez[i][2]
             one[sez[i][0]]= sez[i][1]
-            res[j] = one
+            res.append(one)
             one={}
             j+=1
         else:
