@@ -69,21 +69,25 @@ th, td {
     <th></th>
     <th>Naprava</th> 
     <th>Stopinj</th>
+    <th>Razlika</th>
   </tr>
   <tr>
     <td>T1</td>
     <td>BOJLER</td>
     <td>''' + str(t1.value) + '''</td>
+    <td>''' + str(t1.razlika) + '''</td>
   </tr>
   <tr>
     <td>T2</td>
     <td>Zalogovnik</td>
     <td>'''+ str(t2.value) +'''</td>
+    <td>''' + str(t2.razlika) + '''</td>
   </tr>
   <tr>
     <td>T3</td>
     <td>Peč</td>
     <td>'''+ str(t3.value) +'''</td>
+    <td>''' + str(t3.razlika) + '''</td>
   </tr>
 </table>
 <a href="https://www.w3schools.com">This is a link</a>
@@ -134,11 +138,17 @@ def postData1():
     print("post T1")
     print(request.json)
     content = request.json
-    temp1.value = request.json['t1']
+    v1= request.json['t1']
+    temp1.razlika = temp1.value - v1
+    temp1.value =v1
+    v2= request.json['t2']
+    temp2.razlika = temp2.value - v2
+    temp2.value =v2
+    v3= request.json['t3']
+    temp3.razlika = temp3.value - v3
+    temp3.value =v3
     temp1.time = datetime.datetime.now()
-    temp2.value = request.json['t2']
     temp2.time = datetime.datetime.now()
-    temp3.value = request.json['t3']
     temp3.time = datetime.datetime.now()
     temp4.value = request.json['t4']
     temp4.time = datetime.datetime.now()
