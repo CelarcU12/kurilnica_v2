@@ -198,9 +198,23 @@ def getDeviceMesaure(device_id, st_dni=1, natancnost=10):
                     "cas": str(el[1])})
     return sez
 
+def getDeviceMesaureHour(device_id, st_ur=1, natancnost=10):
+    print("st dni"+st_ur)
+    mycursor = mydb.cursor()
+    sql = "SELECT value, measure_time FROM doma.meritev where device_id = %s and measure_time >= now() - INTERVAL %s HOUR and id mod %s = 0 order by measure_time desc;"
+    val = (int(device_id), st_ur, natancnost )
+    mycursor.execute(sql, val)
+    myresult = mycursor.fetchall()
+    sez = []
+    for el in myresult:
+        sez.append({"vrednost": str(el[0]),
+                    "cas": str(el[1])})
+    return sez
+
+
 def getDeviceMesaureAll(st_dni=1, natancnost=100):
     mycursor = mydb.cursor()
-    sql = "select device_id, value, measure_time from meritev where measure_time in (select     m.measure_time    FROM doma.meritev m where measure_time >= now() - INTERVAL %s DAY and id mod %s = 0 order by measure_time desc);"
+    sql = "select device_id, value, measure_time from meritev where measure_time in (select     m.measure_time    FROM doma.meritev m where measure_time >= now() - INTERVAL %s hour and id mod %s = 0 order by measure_time desc);"
     val = (st_dni, natancnost * st_dni)
     mycursor.execute(sql, val)
     myresult = mycursor.fetchall()

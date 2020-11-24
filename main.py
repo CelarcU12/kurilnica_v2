@@ -145,7 +145,7 @@ def postData1():
     vlaga.value = request.json['h4']
     vlaga.time = datetime.datetime.now()
 
-    reley1.strVal = preveriTemp1(temp1, temp3)
+       # reley1.strVal = preveriTemp1(temp1, temp3)
 
     t_cur = (temp1.value,temp2.value,temp3.value,temp4.value, vlaga.value, vlaga.time)
     t1.append(t_cur)
@@ -220,6 +220,13 @@ def relayStatus():
 def getDataOfDevice(device_id):
     content = request.json
     sez = db.getDeviceMesaure(device_id)
+    return Response(json.dumps(sez), mimetype='application/json')
+
+@app.route('/devices=<device_id>/hour=<hour>', methods=['GET'])
+def getDataOfDeviceHour(device_id,hour):
+    content = request.json
+    sez = db.getDeviceMesaureHour(device_id, hour)
+    print(len(sez))
     return Response(json.dumps(sez), mimetype='application/json')
 
 
