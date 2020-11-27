@@ -165,6 +165,13 @@ def postData1():
     vlaga.value = request.json['h4']
     vlaga.time = datetime.datetime.now()
 
+    zadnjaMer = temp1.time
+
+    if abs(zadnjaMer - temp1.time) > 60:
+        zadnjaMer = temp1.time
+        temp1.razlika = temp1.value - v1
+        temp2.razlika = temp2.value - v2
+        temp3.razlika = temp3.value - v3
 
     name1 = request.form.get('name1')
     autoStr=""
