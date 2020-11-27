@@ -125,9 +125,9 @@ def getData1():
                     'vrednost':temp1.value
                     })
 
-
+auto = 1 
 def preveriTemp1(temp1, temp2):
-    if temp1.value > temp2.value:
+    if (temp1.value > temp2.value) and (temp1.ralika < 0) and auto == 1 :
         return "OFF"
     else:
         return "ON"
@@ -155,7 +155,7 @@ def postData1():
     vlaga.value = request.json['h4']
     vlaga.time = datetime.datetime.now()
 
-       # reley1.strVal = preveriTemp1(temp1, temp3)
+    reley1.strVal = preveriTemp1(temp1, temp3)
 
     t_cur = (temp1.value,temp2.value,temp3.value,temp4.value, vlaga.value, vlaga.time)
     t1.append(t_cur)
