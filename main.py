@@ -29,6 +29,12 @@ reley1 = Kurilnica("Relay1", 7, 0)
 reley2 = Kurilnica("Relay2", 8, 0)
 
 def getHtml(t1=temp1, t2=temp2, t3=temp3, t4=temp4, v=vlaga, r1=reley1, r2=reley2):
+    if auto == 1:
+        autoStr = "Auto ON"
+    else:
+        autoStr = "Auto OFF"
+
+
     html = '''<!DOCTYPE html>
 <html>
 <head>
@@ -55,6 +61,10 @@ th, td {
 <br>
 <h2>Vlaga : '''+ str(v.value) +'''</h2>
 <br>
+
+<br>
+<input type="checkbox" name="name1">Auto<br>
+<h2> '''+ autoStr +'''</h2>
 <br>
 <h2>Pumpa med pečjo in zalogovnikom : '''+ str(r1.strVal) +'''</h2>
 <a href='/r1=OFF'> OFF </a>
@@ -154,6 +164,16 @@ def postData1():
     temp4.time = datetime.datetime.now()
     vlaga.value = request.json['h4']
     vlaga.time = datetime.datetime.now()
+
+
+    name1 = request.form.get('name1')
+    autoStr=""
+    if name1:
+        auto = 1
+        autoStr="Auto ON"
+    else:
+        auto = 0
+        autoStr = "Auto OFF"
 
     reley1.strVal = preveriTemp1(temp1, temp3)
 
