@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 #import markdown
 import json
 
@@ -7,6 +10,7 @@ import sys
 
 import random
 import datetime
+import time
 from Kurilnica import Kurilnica
 import db
 
@@ -64,7 +68,7 @@ th, td {
 
 <br>
 <input type="checkbox" name="name1">Auto<br>
-<h2> '''+ autoStr +'''</h2>
+<h2> '''+ str(autoStr) +'''</h2>
 <br>
 <h2>Pumpa med pečjo in zalogovnikom : '''+ str(r1.strVal) +'''</h2>
 <a href='/r1=OFF'> OFF </a>
@@ -79,7 +83,7 @@ th, td {
     <th></th>
     <th>Naprava</th> 
     <th>Stopinj</th>
-    <th>Razlika</th>
+    <th>Razlika  '''+ str(zadnjaMeritev)+ '''</th>
   </tr>
   <tr>
     <td>T1</td>
@@ -116,6 +120,10 @@ def hello():
     ##      "<p> * T2: zalogovnik:   "+str(temp2.value)+temp2.strVal+"</p>"\
     #        "<p> * T3: peč :     "+str(temp3.value)+temp3.strVal+" </p>"
 
+#@app.route('/i', methods=['GET'])
+#def getStatus():
+#    content = request.json
+#    return "OK"
 
 @app.route('/getAll', methods=['GET'])
 def getAll():
@@ -136,11 +144,20 @@ def getData1():
                     })
 
 auto = 1 
+
+zadnjaMeritev = datetime.datetime.now()
+prvic = True
+r1=0
+r2=0
+r3=0
+
 def preveriTemp1(temp1, temp2):
-    if (temp1.value > temp2.value) and (temp1.ralika < 0) and auto == 1 :
+    if (temp1.value > temp3.value) and (temp3.razlika <= 0):
         return "OFF"
-    else:
+    elif (temp1.value <= temp3.value):
         return "ON"
+    else:
+        return "OFF"
 
 
 @app.route('/t1', methods=['POST'])
@@ -149,13 +166,13 @@ def postData1():
     print(request.json)
     content = request.json
     v1= request.json['t1']
-    temp1.razlika = temp1.value - v1
+#    temp1.razlika = temp1.value - v1
     temp1.value =v1
     v2= request.json['t2']
-    temp2.razlika = temp2.value - v2
+#    temp2.razlika = temp2.value - v2
     temp2.value =v2
     v3= request.json['t3']
-    temp3.razlika = temp3.value - v3
+#    temp3.razlika = temp3.value - v3
     temp3.value =v3
     temp1.time = datetime.datetime.now()
     temp2.time = datetime.datetime.now()
@@ -164,14 +181,30 @@ def postData1():
     temp4.time = datetime.datetime.now()
     vlaga.value = request.json['h4']
     vlaga.time = datetime.datetime.now()
+    global zadnjaMeritev
+    global prvic
+    global r1, r2, r3
+    razlika = datetime.datetime.now() - zadnjaMeritev
+    
+    if prvic:
+        print("Razlika prvic")
+        r1 = v1
+        r2 = v2
+        r3 = v3
+        prvic = False
+        print("Razlika prvic"+ str(r1))
+    print(razlika.seconds)
+    if razlika.seconds > 180:
+        print("vec kot 180")
+        zadnjaMeritev = temp1.time
+        print(zadnjaMeritev)
 
-    zadnjaMer = temp1.time
-
-    if abs(zadnjaMer - temp1.time) > 60:
-        zadnjaMer = temp1.time
-        temp1.razlika = temp1.value - v1
-        temp2.razlika = temp2.value - v2
-        temp3.razlika = temp3.value - v3
+        temp1.razlika = round(temp1.value - r1,2)
+        temp2.razlika = round(temp2.value - r2,2)
+        temp3.razlika = round(temp3.value - r3,2)
+        r1 = temp1.value
+        r2 = temp2.value
+        r3 = temp3.value
 
     name1 = request.form.get('name1')
     autoStr=""
@@ -312,7 +345,11 @@ def getDataOfAllDevices():
 @app.route('/i', methods=['GET'])
 def getInfoOfDevices():
     ''' dobi zadnje informacije o vseh napravah '''
-    sez = db.getLastData()
+    try:
+        sez = db.getLastData()
+    except:
+        return 500
+    
     res=[]
     for el in sez:
         res.append({
@@ -328,4 +365,10 @@ def getInfoOfDevices():
     #return res
     return Response(json.dumps(res),  mimetype='application/json')
 if __name__=='__main__':
+    print("cakamo ................")
+    time.sleep(1)
+    print(" ........  zaganjamo .......")
     app.run(host='0.0.0.0', threaded=True)
+    
+        
+        

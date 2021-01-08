@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import mysql.connector
 
 import datetime
@@ -8,13 +10,15 @@ from Kurilnica import Kurilnica
 
 #logging.basicConfig(filename='log/db.log', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
   #                  level=logging.DEBUG)
-
-mydb = mysql.connector.connect(
-    host="192.168.64.117",
-    user="pi",
-    passwd="password",
-    database="doma"
-)
+try:
+    mydb = mysql.connector.connect(
+        host="192.168.64.117",
+        user="pi",
+        passwd="password",
+        database="doma"
+    )
+except:
+    print("Error mzsql connect error")
 
 
 def saveTempToDB(name, val):
