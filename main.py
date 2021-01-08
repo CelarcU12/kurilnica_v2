@@ -5,6 +5,8 @@
 import json
 
 import os
+
+
 from flask import Flask, escape, request,jsonify,Response, redirect
 import sys
 
@@ -13,6 +15,8 @@ import datetime
 import time
 from Kurilnica import Kurilnica
 import db
+import graf
+import htmlStran as html
 
 
 #from relay import getStatus, on, off
@@ -32,98 +36,13 @@ vlaga = Kurilnica("Vlaga", 5)
 reley1 = Kurilnica("Relay1", 7, 0)
 reley2 = Kurilnica("Relay2", 8, 0)
 
-def getHtml(t1=temp1, t2=temp2, t3=temp3, t4=temp4, v=vlaga, r1=reley1, r2=reley2):
-    if auto == 1:
-        autoStr = "Auto ON"
-    else:
-        autoStr = "Auto OFF"
 
-
-    html = '''<!DOCTYPE html>
-<html>
-<head>
-<style>
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 15px;
-}
-</style>
-</head>
-<body>
-
-<h2>Kurilnica</h2>
-<p>Zadnja meritev: '''+ str(t4.time) +'''</p>
-
-
-<br>
-<h2>Temperatura : '''+ str(t4.value) +'''</h2>
-<br>
-
-<br>
-<h2>Vlaga : '''+ str(v.value) +'''</h2>
-<br>
-
-<br>
-<input type="checkbox" name="name1">Auto<br>
-<h2> '''+ str(autoStr) +'''</h2>
-<br>
-<h2>Pumpa med pečjo in zalogovnikom : '''+ str(r1.strVal) +'''</h2>
-<a href='/r1=OFF'> OFF </a>
-<a href='http://192.168.64.117:5000/r1=ON'> ON</a>
-<h2>Pumpa za stanovanje : '''+ str(r2.strVal) +'''</h2>
-<a href='http://192.168.64.117:5000/r2=OFF'> OFF </a>
-<a href='http://192.168.64.117:5000/r2=ON'> ON</a>
-<br>
-<br>
-<table style="width:100%">
-  <tr>
-    <th></th>
-    <th>Naprava</th> 
-    <th>Stopinj</th>
-    <th>Razlika  '''+ str(zadnjaMeritev)+ '''</th>
-  </tr>
-  <tr>
-    <td>T1</td>
-    <td>BOJLER</td>
-    <td>''' + str(t1.value) + '''</td>
-    <td>''' + str(t1.razlika) + '''</td>
-  </tr>
-  <tr>
-    <td>T2</td>
-    <td>Zalogovnik</td>
-    <td>'''+ str(t2.value) +'''</td>
-    <td>''' + str(t2.razlika) + '''</td>
-  </tr>
-  <tr>
-    <td>T3</td>
-    <td>Peč</td>
-    <td>'''+ str(t3.value) +'''</td>
-    <td>''' + str(t3.razlika) + '''</td>
-  </tr>
-</table>
-<a href="https://www.w3schools.com">This is a link</a>
-
-</body>
-</html>
-'''
-    return html
 @app.route('/')
 def hello():
     '''dokumentcija '''
     logging.info(" domov ")
-    return getHtml(temp1,temp2,temp3,temp4,vlaga ,reley1,reley2)
-    #return "<h1>Hello</h1>" \
-     #      "<p> * T1: bojler:    "  +str(temp1.value)+temp1.strVal+"</p>"\
-    ##      "<p> * T2: zalogovnik:   "+str(temp2.value)+temp2.strVal+"</p>"\
-    #        "<p> * T3: peč :     "+str(temp3.value)+temp3.strVal+" </p>"
+    return html.getHtml(temp1,temp2,temp3,temp4,vlaga ,reley1,reley2)
 
-#@app.route('/i', methods=['GET'])
-#def getStatus():
-#    content = request.json
-#    return "OK"
 
 @app.route('/getAll', methods=['GET'])
 def getAll():
@@ -150,6 +69,9 @@ prvic = True
 r1=0
 r2=0
 r3=0
+
+def getZadnjaMeritev():
+    return zadnjaMeritev
 
 def preveriTemp1(temp1, temp2):
     if (temp1.value > temp3.value) and (temp3.razlika <= 0):

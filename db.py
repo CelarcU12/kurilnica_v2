@@ -203,7 +203,7 @@ def getDeviceMesaure(device_id, st_dni=1, natancnost=10):
     return sez
 
 def getDeviceMesaureHour(device_id, st_ur=1, natancnost=10):
-    print("st dni"+st_ur)
+    #print("st dni"+str(st_ur))
     mycursor = mydb.cursor()
     sql = "SELECT value, measure_time FROM doma.meritev where device_id = %s and measure_time >= now() - INTERVAL %s HOUR and id mod %s = 0 order by measure_time desc;"
     val = (int(device_id), st_ur, natancnost )
