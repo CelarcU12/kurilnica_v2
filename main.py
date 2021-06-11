@@ -17,7 +17,7 @@ from Kurilnica import Kurilnica
 import db
 import graf
 import htmlStran as html
-
+from alarmi import preveriMrzloVodo
 
 #from relay import getStatus, on, off
 
@@ -143,6 +143,7 @@ def postData1():
     t1.append(t_cur)
 
     db.saveMeasureToDB([temp1,temp2,temp3,temp4,vlaga,reley1,reley2])
+    preveriMrzloVodo(temp1.value)
     return jsonify({
         'las_val': datetime.datetime.now(),
         't1': t_cur,
