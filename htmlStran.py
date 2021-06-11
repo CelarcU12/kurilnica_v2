@@ -73,15 +73,9 @@ th, td {
 <div style="position: relative; width: 90%;">
 <a> BOJLER</a>
 '''+ graf.getGrafById(1)+ '''
-'''+ graf.getGrafById(2)+ '''
-'''+ graf.getGrafById(3)+ '''
-</div>
-<div style="position: relative; width: 30%;">
 <a> ZALOGOVNIK</a>
 '''+ graf.getGrafById(2)+ '''
-</div>
-<div style="position: relative; width: 30%;">
-<a> PEČ </a>
+<a> PEC</a>
 '''+ graf.getGrafById(3)+ '''
 </div>
 </body>

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#!/usr/bin/python
 
 #import markdown
 import json
@@ -73,12 +73,15 @@ r3=0
 def getZadnjaMeritev():
     return zadnjaMeritev
 
-def preveriTemp1(temp1, temp2):
-    if (temp1.value > temp3.value) and (temp3.razlika <= 0):
+def preveriTemp1():
+    if (temp1.value > temp3.value and temp2.value < temp1.value):
+        print("Preveri temp 1"+str(temp1.value)+str(temp2.value)+str(temp3.value) )
         return "OFF"
-    elif (temp1.value <= temp3.value):
+    elif (temp1.value <= temp3.value or temp2.value > temp1.value):
+        print("Preveri temp2")
         return "ON"
     else:
+        print("Preveri temp 3")
         return "OFF"
 
 
@@ -96,6 +99,12 @@ def postData1():
     v3= request.json['t3']
 #    temp3.razlika = temp3.value - v3
     temp3.value =v3
+    print("v1"+str(v1))
+    print("v2"+str(v2))
+    print("v3"+str(v3))
+
+
+
     temp1.time = datetime.datetime.now()
     temp2.time = datetime.datetime.now()
     temp3.time = datetime.datetime.now()
@@ -137,7 +146,7 @@ def postData1():
         auto = 0
         autoStr = "Auto OFF"
 
-    reley1.strVal = preveriTemp1(temp1, temp3)
+    reley1.strVal = preveriTemp1()
 
     t_cur = (temp1.value,temp2.value,temp3.value,temp4.value, vlaga.value, vlaga.time)
     t1.append(t_cur)
