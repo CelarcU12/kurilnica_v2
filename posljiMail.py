@@ -21,7 +21,7 @@ def posljiemail(email, text):
         server.ehlo() # Can be omitted
         server.login(sender_email, password)
        
-        server.sendmail(sender_email, receiver_email, message)
+        server.sendmail(sender_email, receiver_email,"Subject:Kurilnica alarm\n\n"+message)
         print("Poslano osebi: "+ str(email))
 
         # TODO: Send email here
