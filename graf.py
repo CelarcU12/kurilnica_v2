@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 # Izriši graf
 # temperatura zadnjih n ur
 

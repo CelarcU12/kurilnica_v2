@@ -1,5 +1,6 @@
 import smtplib, ssl
 import base64
+from datetime import datetime
 
 def posljiemail(email, text):
     smtp_server = "smtp.gmail.com"
@@ -12,16 +13,27 @@ def posljiemail(email, text):
      
     sender_email = "zrebanje2020@gmail.com"
     receiver_email = email
-    message = text
     # Try to log in to server and send email
+    time = datetime.now()
+    message ="""From: Kurilnica <iblabla@gmail.com>
+Subject: Obvestilo ob: """+str(time.hour)+""":"""+str(time.minute)+"""
+
+"""+text
+   # To: """+email+""" <"""+email+"""> 
+   # Subject: Kurilnica alarm
+   # 
+   # """+text
+    # Try to log in to server and send email
+    print("pred try")
     try:
         server = smtplib.SMTP(smtp_server,port)
         server.ehlo() # Can be omitted
         server.starttls(context=context) # Secure the connection
         server.ehlo() # Can be omitted
+        print('before login')
         server.login(sender_email, password)
-       
-        server.sendmail(sender_email, receiver_email,"Subject:Kurilnica alarm\n\n"+message)
+        print('sending mail.... ')
+        server.sendmail(sender_email, receiver_email,message)
         print("Poslano osebi: "+ str(email))
 
         # TODO: Send email here
@@ -30,4 +42,5 @@ def posljiemail(email, text):
         print(e)
     finally:
         server.quit() 
+#posljiemail('furbek.celarc@gmail.com','test ')
 
