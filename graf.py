@@ -17,15 +17,21 @@ def getGrafDiv(x=[],y=[]):
     fig = px.line(x=x, y=y)
     fig.update_traces(mode='markers+lines')
 
-    div = fig.to_html(full_html=False) 
+    div = fig.to_html(full_html=False)
+    print(x)
+    print(y)
+    print(div)
     return div
 
 
 def getGrafById(device_id=1):
     js = db.getDeviceMesaure(device_id)
+    if js==[]:
+        return "<div> Napaka </div>"
     x=[]
     y=[]
     for el in js:
         x.append(el['cas'])
         y.append(float(el['vrednost']))
     return getGrafDiv(x,y)
+getGrafById(1)
