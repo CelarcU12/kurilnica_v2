@@ -204,7 +204,7 @@ def getDeviceMesaure(device_id, st_dni=1, natancnost=10):
         sez.append({"vrednost": str(el[0]),
                     "cas": str(el[1])})
     return sez
-
+#print(getDeviceMesaure(1))
 def getDeviceMesaureHour(device_id, st_ur=1, natancnost=10):
     #print("st dni"+str(st_ur))
     mycursor = mydb.cursor()

@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf-8
 
 # Izriši graf
 # temperatura zadnjih n ur
@@ -21,7 +22,10 @@ def getGrafDiv(x=[],y=[]):
 
 
 def getGrafById(device_id=1):
-    js = db.getDeviceMesaure(device_id)
+    try:
+        js = db.getDeviceMesaure(device_id)
+    except Exception as ex:
+        return "<div> Težave z povezavo na baz  " + str(ex) + " </div>"
     if js==[]:
         return "<div> Napaka </div>"
     x=[]
