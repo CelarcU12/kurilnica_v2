@@ -87,6 +87,7 @@ def preveriTemp1():
 @app.route('/t1', methods=['POST'])
 def postData1():
     print("post T1")
+    print("REQ: "+ str(request))
     print(request.json)
     content = request.json
     v1= request.json['t1']
@@ -151,6 +152,9 @@ def postData1():
     t1.append(t_cur)
 
     db.saveMeasureToDB([temp1,temp2,temp3,temp4,vlaga,reley1,reley2])
+    db.saveDevice(1,temp1.value)
+    db.saveDevice(2,temp2.value)
+    db.saveDevice(3,temp3.value)
     preveriMrzloVodo(temp1.value)
     return jsonify({
         'las_val': datetime.datetime.now(),

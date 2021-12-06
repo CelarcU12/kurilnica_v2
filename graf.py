@@ -23,7 +23,8 @@ def getGrafDiv(x=[],y=[]):
 
 def getGrafById(device_id=1):
     try:
-        js = db.getDeviceMesaure(device_id)
+        #js = db.getDeviceMesaure(device_id)
+        js = db.getDeviceMesaureNew(device_id)
     except Exception as ex:
         return "<div> Težave z povezavo na baz  " + str(ex) + " </div>"
     if js==[]:

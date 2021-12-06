@@ -179,7 +179,7 @@ def saveMeasureToDB(sez=[]):
     try:
         mycursor = mydb.cursor()
         for meritev in sez:
-
+            print(meritev.id + " tip: "+ meritev.type)
             sql = "insert into   doma.meritev (device_id,value, value_type,status, user ) values (%s,%s,%s, 1, 1)"
             val = (meritev.id, meritev.value, meritev.type)
         # mycursor.callproc('addMeritev', ['t1',20])
@@ -204,7 +204,18 @@ def getDeviceMesaure(device_id, st_dni=1, natancnost=10):
         sez.append({"vrednost": str(el[0]),
                     "cas": str(el[1])})
     return sez
-#print(getDeviceMesaure(1))
+
+def getDeviceMesaureNew(device_id):
+    mycursor = mydb.cursor()
+    sql = "SELECT value, create_time FROM doma.device_"+str(device_id)+" where create_time >= now() - INTERVAL 1 DAY order by create_time desc;"
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    sez = []
+    for el in myresult:
+        sez.append({"vrednost": str(el[0]),
+                    "cas": str(el[1])})
+    return sez
+#print(getDeviceMesaureNew(1))
 def getDeviceMesaureHour(device_id, st_ur=1, natancnost=10):
     #print("st dni"+str(st_ur))
     mycursor = mydb.cursor()
@@ -259,3 +270,16 @@ def getLastData():
         sez.append(Kurilnica(el[1],el[0],el[3],str(el[3])+el[4],el[5],el[4], el[2]))
     return sez
 
+def saveDevice(device_id, value):
+    mycursor = mydb.cursor()
+
+    sql1 = "SELECT TIMESTAMPDIFF(MINUTE,DATE_FORMAT(max(create_time),'%Y-%m-%d %H:%i'),DATE_FORMAT(now(),'%Y-%m-%d %H:%i')) FROM doma.device_"+str(device_id)
+    mycursor.execute(sql1)
+    razlika = mycursor.fetchall()[0][0]
+    if razlika>0:
+        sql = "insert into   doma.device_"+str(device_id)+" (value) values ("+str(value)+")"
+        val = (float(value))
+        # mycursor.callproc('addMeritev', ['t1',20])
+        mycursor.execute(sql, val)
+        mydb.commit()    
+    
