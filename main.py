@@ -79,7 +79,6 @@ def preveriTemp1():
         return "OFF"
     elif (temp1.value <= temp3.value or temp2.value > temp1.value):
         print("Preveri temp2")
-        return "ON"
     else:
         print("Preveri temp 3")
         return "OFF"
