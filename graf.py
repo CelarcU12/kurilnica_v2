@@ -28,7 +28,7 @@ def getGrafById(device_id=1):
     except Exception as ex:
         return "<div> Težave z povezavo na baz  " + str(ex) + " </div>"
     if js==[]:
-        return "<div> Napaka "+ str(ex)+ " </div>"
+        return "<div> Napaka : prazen seznam  </div>"
     x=[]
     y=[]
     for el in js:
