@@ -276,7 +276,13 @@ def saveDevice(device_id, value):
     sql1 = "SELECT TIMESTAMPDIFF(MINUTE,DATE_FORMAT(max(create_time),'%Y-%m-%d %H:%i'),DATE_FORMAT(now(),'%Y-%m-%d %H:%i')) FROM doma.device_"+str(device_id)
     mycursor.execute(sql1)
     razlika = mycursor.fetchall()[0][0]
-    if (razlika>0):
+    if(razlika is None):
+        sql = "insert into   doma.device_"+str(device_id)+" (value) values ("+str(value)+")"
+        val = (float(value))
+        # mycursor.callproc('addMeritev', ['t1',20])
+        mycursor.execute(sql, val)
+        mydb.commit()
+    elif (razlika>0):
         sql = "insert into   doma.device_"+str(device_id)+" (value) values ("+str(value)+")"
         val = (float(value))
         # mycursor.callproc('addMeritev', ['t1',20])
