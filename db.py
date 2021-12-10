@@ -289,3 +289,11 @@ def saveDevice(device_id, value):
         mycursor.execute(sql, val)
         mydb.commit()
 
+def getLastData(tableName):
+    sql = "SELECT * FROM "+tableName+" order by create_time desc LIMIT 1;"
+    mycursor = mydb.cursor()
+    mycursor.execute(sql)
+    temp = mycursor.fetchall()[0][2]
+    return temp
+
+#print(getLastData("device_4"))

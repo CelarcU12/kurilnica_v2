@@ -1,6 +1,7 @@
 #HTML stran
 
 import graf
+import db
 
 
 
@@ -18,30 +19,67 @@ table, th, td {
 th, td {
   padding: 15px;
 }
+body {
+  text-align: center;
+}
+#header,
+#footer {
+  border: 2px solid green;
+  padding: 10px;
+  color: green;
+  font-size: 1.5em;
+  margin: 10px auto;
+}
+#lhs {
+  border: 2px solid red;
+  height: 600px;
+}
+#rhs1,
+#rhs2 {
+  border: 2px solid blue;
+  height: 140px;
+  margin-bottom: 20px;
+}
+#rhs2 {
+  margin-bottom: 0;
+}
+}
 </style>
 </head>
 <body>
-
-<h2>Kurilnica</h2>
-<p>Zadnja meritev: '''+ str(t4.time) +'''</p>
-
-
-<br>
-<h2>Temperatura : '''+ str(t4.value) +'''</h2>
-<br>
-
-<br>
-<h2>Vlaga : '''+ str(v.value) +'''</h2>
-<br>
+<div class="container">
+ <div id="row">
+  <div id="col-xs-6">
+   <div id="lhs">
+    <h2>Kurilnica</h2>
+    <p>Zadnja meritev: '''+ str(t4.time) +'''</p>
 
 
-<h2>Pumpa med pečjo in zalogovnikom : '''+ str(r1.strVal) +'''</h2>
-<a href='/r1=OFF'> OFF </a>
-<a href='http://192.168.64.117:5000/r1=ON'> ON</a>
-<h2>Pumpa za stanovanje : '''+ str(r2.strVal) +'''</h2>
-<a href='http://192.168.64.117:5000/r2=OFF'> OFF </a>
-<a href='http://192.168.64.117:5000/r2=ON'> ON</a>
-<br>
+    <br>
+    <h2>Temperatura : '''+ str(t4.value) +'''</h2>
+    <br>
+
+    <br>
+    <h2>Vlaga : '''+ str(v.value) +'''</h2>
+    <br>
+
+
+    <h2>Pumpa med pečjo in zalogovnikom : '''+ str(r1.strVal) +'''</h2>
+    <a href='/r1=OFF'> OFF </a>
+    <a href='http://192.168.64.117:5000/r1=ON'> ON</a>
+    <h2>Pumpa za stanovanje : '''+ str(r2.strVal) +'''</h2>
+    <a href='http://192.168.64.117:5000/r2=OFF'> OFF </a>
+    <a href='http://192.168.64.117:5000/r2=ON'> ON</a>
+    <br>
+   </div>
+  </div>
+  <div id="col-xs-6">
+   <div id="rhs1">
+    <p> Temperatura v sobi: '''+str(db.getLastData("device_4"))+''' </p>
+  </div>
+  </div>
+ </div>
+</div>
 <br>
 <table style="width:90%">
   <tr>
