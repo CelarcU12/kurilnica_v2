@@ -1,11 +1,17 @@
+#!/usr/bin/env python3
+#-*- coding: utf-8 -*-
+
+
 from logging import exception
 import urllib.request, json
 import sys
 
 import db
 
-lokacija= sys.argv[1]
+#lokacija= sys.argv[1]
+lokacija = "http://192.168.64.130:8080/t"
 # "http://192.168.64.116:8080/t"
+
 
 def getData(apiUrl):
     try:

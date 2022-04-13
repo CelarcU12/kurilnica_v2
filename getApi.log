@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "getDataFromApi.py", line 6, in <module>
+    import urllib.request, json
+ImportError: No module named request

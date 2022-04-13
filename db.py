@@ -22,6 +22,7 @@ except:
 
 
 def saveTempToDB(name, val):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     if name == "T1":
         dev_id = 1
@@ -37,6 +38,7 @@ def saveTempToDB(name, val):
 
 
 def saveRelayStatus(name, val, t1, t2):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     val_num = 0
     relay_id = 0
@@ -53,6 +55,7 @@ def saveRelayStatus(name, val, t1, t2):
 
 
 def getData(tablename, name, from_, to):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "SELECT * from " + tablename + " where name=%s AND time > %s AND time < %s"
     val = (name, from_, to)
@@ -65,6 +68,7 @@ def getData(tablename, name, from_, to):
 
 
 def getJsonData(tablename, name, from_, to):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "SELECT * from " + tablename + " where name=%s AND time > %s AND time < %s"
     val = (name, from_, to)
@@ -79,6 +83,7 @@ def getJsonData(tablename, name, from_, to):
 
 
 def getMax(name, day=0):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     if day == 0:
         sql = "select name, time, max(value)  from temperatura where date(time) !=%s and name=%s;"
@@ -91,6 +96,7 @@ def getMax(name, day=0):
 
 
 def getMin(name, day=0):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     if day == 0:
         sql = "select name, time, min(value)  from temperatura where date(time) !=%s and name=%s;"
@@ -103,6 +109,7 @@ def getMin(name, day=0):
 
 
 def getToday(name):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "SELECT name, time, value FROM temperatura WHERE DATE(time) = DATE(NOW() - INTERVAL 1 DAY) and name='T1';"
     mycursor.execute(sql, name)
@@ -121,6 +128,7 @@ def urNazaj(name, ure):
     i = int(ure)
     if (name == "T1" and i % 2 == 0):
         i -= 1
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "SELECT name, from_unixtime(unix_timestamp(sec_to_time((time_to_sec(time) DIV 60)*60))), value FROM temperatura WHERE time >= NOW() - INTERVAL %s HOUR and name=%s and id mod %s = 0 order by time;"
     val = (ure, name, i)
@@ -138,6 +146,7 @@ def dniNazaj(name, dni):
     '''dni Nazaj -> ime termometra, stevilo dni
         Vrne podatke od tega trenutka za pa n dni nazaj
         vsak 5ti podatek'''
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "SELECT name, time, value, id FROM temperatura WHERE time >= NOW() - INTERVAL %s DAY and name=%s and id mod 5 = 0 order by time;"
     val = (int(dni), name)
@@ -154,6 +163,7 @@ def dniNazaj(name, dni):
 
 def relaySpremembe(limit):
     '''On/Off spremembe, ki so se dogajale na releyju'''
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "SELECT id,relay_id, name, t1, t2, status, status_id, time from relayStatus limit %s ;"
     val = limit
@@ -177,6 +187,7 @@ def saveMeasureToDB(sez=[]):
     :return: 1 -> OK, 0-> ERROR
     '''
     try:
+        mydb.reconnect()
         mycursor = mydb.cursor()
         for meritev in sez:
             print(meritev.id + " tip: "+ meritev.type)
@@ -194,6 +205,7 @@ def saveMeasureToDB(sez=[]):
         return 9
 
 def getDeviceMesaure(device_id, st_dni=1, natancnost=10):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "SELECT value, measure_time FROM doma.meritev where device_id = %s and measure_time >= now() - INTERVAL %s DAY and id mod %s = 0 order by measure_time desc;"
     val = (int(device_id), st_dni, natancnost * st_dni)
@@ -206,6 +218,7 @@ def getDeviceMesaure(device_id, st_dni=1, natancnost=10):
     return sez
 
 def getDeviceMesaureNew(device_id):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "SELECT value, create_time FROM doma.device_"+str(device_id)+" where create_time >= now() - INTERVAL 1 DAY order by create_time desc;"
     mycursor.execute(sql)
@@ -218,6 +231,7 @@ def getDeviceMesaureNew(device_id):
 #print(getDeviceMesaureNew(1))
 def getDeviceMesaureHour(device_id, st_ur=1, natancnost=10):
     #print("st dni"+str(st_ur))
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "SELECT value, measure_time FROM doma.meritev where device_id = %s and measure_time >= now() - INTERVAL %s HOUR and id mod %s = 0 order by measure_time desc;"
     val = (int(device_id), st_ur, natancnost )
@@ -231,6 +245,7 @@ def getDeviceMesaureHour(device_id, st_ur=1, natancnost=10):
 
 
 def getDeviceMesaureAll(st_dni=1, natancnost=100):
+    mydb.reconnect()
     mycursor = mydb.cursor()
     sql = "select device_id, value, measure_time from meritev where measure_time in (select     m.measure_time    FROM doma.meritev m where measure_time >= now() - INTERVAL %s hour and id mod %s = 0 order by measure_time desc);"
     val = (st_dni, natancnost * st_dni)
@@ -262,6 +277,7 @@ def getDeviceMesaureAll(st_dni=1, natancnost=100):
 
 def getLastData():
     sql = 'SELECT m.device_id, d.full_name, d.comment, m.value, d.type, m.measure_time FROM doma.meritev m, doma.device d where m.device_id = d.device_id and measure_time > now() - interval 1 hour order by m.measure_time desc , m.device_id limit 7;'
+    mydb.reconnect()
     mycursor = mydb.cursor()
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
@@ -271,6 +287,7 @@ def getLastData():
     return sez
 
 def saveDevice(device_id, value):
+    mydb.reconnect()
     mycursor = mydb.cursor()
 
     sql1 = "SELECT TIMESTAMPDIFF(MINUTE,DATE_FORMAT(max(create_time),'%Y-%m-%d %H:%i'),DATE_FORMAT(now(),'%Y-%m-%d %H:%i')) FROM doma.device_"+str(device_id)
@@ -291,6 +308,7 @@ def saveDevice(device_id, value):
 
 def getLastData(tableName):
     sql = "SELECT * FROM "+tableName+" order by create_time desc LIMIT 1;"
+    mydb.reconnect()
     mycursor = mydb.cursor()
     mycursor.execute(sql)
     temp = mycursor.fetchall()[0][2]

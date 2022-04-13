@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import smtplib, ssl
 import base64
 from datetime import datetime
